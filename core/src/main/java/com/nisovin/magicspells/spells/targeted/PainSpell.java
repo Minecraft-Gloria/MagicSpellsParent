@@ -12,6 +12,8 @@ import com.nisovin.magicspells.spells.TargetedEntitySpell;
 import com.nisovin.magicspells.events.SpellApplyDamageEvent;
 import com.nisovin.magicspells.events.MagicSpellsEntityDamageByEntityEvent;
 
+import java.math.BigDecimal;
+
 public class PainSpell extends TargetedSpell implements TargetedEntitySpell {
 
 	private final ConfigData<String> spellDamageType;
@@ -62,35 +64,36 @@ public class PainSpell extends TargetedSpell implements TargetedEntitySpell {
 		DamageCause damageType = this.damageType.get(data);
 		String spellDamageType = this.spellDamageType.get(data);
 
-		if (checkPlugins.get(data)) {
-			MagicSpellsEntityDamageByEntityEvent event = new MagicSpellsEntityDamageByEntityEvent(data.caster(), data.target(), damageType, damage, this);
-			if (!event.callEvent()) return noTarget(data);
+//		if (checkPlugins.get(data)) {
+		MagicSpellsEntityDamageByEntityEvent damageEvent = new MagicSpellsEntityDamageByEntityEvent(data.caster(), data.target(), damageType, damage, this);
+		if (!damageEvent.callEvent()) return noTarget(data);
 
-			if (!avoidDamageModification.get(data)) damage = event.getDamage();
-			data.target().setLastDamageCause(event);
-		}
+		if (!avoidDamageModification.get(data)) damage = damageEvent.getDamage();
+		data.target().setLastDamageCause(damageEvent);
+//		}
 
-		SpellApplyDamageEvent event = new SpellApplyDamageEvent(this, data.caster(), data.target(), damage, damageType, spellDamageType);
+		SpellApplyDamageEvent event = new SpellApplyDamageEvent(this, data.caster(), data.target(), damage, damageType, spellDamageType, data.args());
 		event.callEvent();
 		damage = event.getFinalDamage();
 
-		if (ignoreArmor.get(data)) {
+		if(!event.isProcessed()) {
+//		if (ignoreArmor.get(data)) {
 			double maxHealth = Util.getMaxHealth(data.target());
 
 			double health = Math.min(data.target().getHealth(), maxHealth);
-			health = Math.max(Math.min(health - damage, maxHealth), 0);
+			health = Math.max(Math.min(BigDecimal.valueOf(health).subtract(BigDecimal.valueOf(damage)).doubleValue(), maxHealth), 0);
 
 			if (health == 0 && data.caster() instanceof Player player) data.target().setKiller(player);
 			data.target().setHealth(health);
 			data.target().setLastDamage(damage);
-			Util.playHurtEffect(data.target(), data.caster());
+//			Util.playHurtEffect(data.target(), data.caster());
 
-			playSpellEffects(data);
-			return new CastResult(PostCastAction.HANDLE_NORMALLY, data);
+//			playSpellEffects(data);
+//			return new CastResult(PostCastAction.HANDLE_NORMALLY, data);
 		}
 
-		if (tryAvoidingAntiCheatPlugins.get(data)) data.target().damage(damage);
-		else data.target().damage(damage, data.caster());
+//		if (tryAvoidingAntiCheatPlugins.get(data)) data.target().damage(damage);
+//		else data.target().damage(damage, data.caster());
 
 		playSpellEffects(data);
 		return new CastResult(PostCastAction.HANDLE_NORMALLY, data);

@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.targeted;
 
+import com.nisovin.magicspells.events.SpellForcetossEvent;
+import com.nisovin.magicspells.util.compat.EventUtil;
 import org.bukkit.util.Vector;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
@@ -89,6 +91,13 @@ public class ForcetossSpell extends TargetedSpell implements TargetedEntitySpell
 
 		if (addVelocityInstead.get(data)) target.setVelocity(target.getVelocity().add(v));
 		else target.setVelocity(v);
+
+		SpellForcetossEvent event = new SpellForcetossEvent(this, caster, target, v);
+		EventUtil.call(event);
+
+		if(event.isCancelled()) new CastResult(PostCastAction.HANDLE_NORMALLY, data);
+
+		target.setVelocity(event.getVelocity());
 
 		playSpellEffects(data);
 		return new CastResult(PostCastAction.HANDLE_NORMALLY, data);

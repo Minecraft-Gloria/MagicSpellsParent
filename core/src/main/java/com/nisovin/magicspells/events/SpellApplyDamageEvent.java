@@ -5,16 +5,22 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 import com.nisovin.magicspells.Spell;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 public class SpellApplyDamageEvent extends SpellEvent {
 
 	private final LivingEntity target;
-	private final double damage;
+	private double damage;
 	private final String spellDamageType;
 	private final DamageCause cause;
 	private final long timestamp;
 	private float modifier;
+	private final String[] args;
 
-	public SpellApplyDamageEvent(Spell spell, LivingEntity caster, LivingEntity target, double damage, DamageCause cause, String spellDamageType) {
+	private boolean processed = false;
+
+	public SpellApplyDamageEvent(Spell spell, LivingEntity caster, LivingEntity target, double damage, DamageCause cause, String spellDamageType, String... args) {
 		super(spell, caster);
 
 		this.target = target;
@@ -25,6 +31,8 @@ public class SpellApplyDamageEvent extends SpellEvent {
 		timestamp = System.currentTimeMillis();
 
 		modifier = 1.0f;
+
+		this.args = args;
 	}
 
 	public void applyDamageModifier(float modifier) {
@@ -37,6 +45,10 @@ public class SpellApplyDamageEvent extends SpellEvent {
 
 	public double getDamage() {
 		return damage;
+	}
+
+	public void setDamage(double damage) {
+		this.damage = damage;
 	}
 
 	public DamageCause getCause() {
@@ -52,8 +64,38 @@ public class SpellApplyDamageEvent extends SpellEvent {
 	}
 
 	public double getFinalDamage() {
-		return damage * modifier;
+		return BigDecimal.valueOf(damage)
+				.multiply(BigDecimal.valueOf(modifier))
+				.setScale(2, RoundingMode.HALF_UP).doubleValue();
 	}
+
+	public String[] getArgs() {
+		return this.args;
+	}
+
+	public boolean isProcessed() {
+		return processed;
+	}
+
+	public void setProcessed(boolean processed) {
+		this.processed = processed;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	public String getSpellDamageType() {
 		return spellDamageType;

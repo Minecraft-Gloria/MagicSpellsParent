@@ -5,6 +5,8 @@ import java.util.*;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.ArrayListMultimap;
 
+import com.nisovin.magicspells.events.SpellLeapEvent;
+import com.nisovin.magicspells.util.compat.EventUtil;
 import org.bukkit.util.Vector;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -35,6 +37,8 @@ public class LeapSpell extends InstantSpell {
 	private final ConfigData<Boolean> addVelocityInstead;
 	private final ConfigData<Boolean> powerAffectsVelocity;
 
+	private final ConfigData<Boolean> slowable;
+
 	private Subspell landSpell;
 
 	public LeapSpell(MagicConfig config, String spellName) {
@@ -50,6 +54,8 @@ public class LeapSpell extends InstantSpell {
 		powerAffectsVelocity = getConfigDataBoolean("power-affects-velocity", true);
 
 		landSpellName = getConfigString("land-spell", "");
+
+		slowable = getConfigDataBoolean("slowable", false);
 	}
 
 	@Override
@@ -86,6 +92,7 @@ public class LeapSpell extends InstantSpell {
 		float rotation = this.rotation.get(data);
 
 		v.setY(0).normalize().multiply(forwardVelocity).setY(upwardVelocity);
+
 		if (rotation != 0) Util.rotateVector(v, rotation);
 		v = Util.makeFinite(v);
 
@@ -97,6 +104,11 @@ public class LeapSpell extends InstantSpell {
 		}
 
 		leapMonitor.add(new LeapData(this, data, cancelDamage.get(data)));
+
+		SpellLeapEvent event = new SpellLeapEvent(this, data.caster(), v.clone());
+		EventUtil.call(event);
+		if(event.isCancelled()) return new CastResult(PostCastAction.HANDLE_NORMALLY, data);
+		if(slowable.get(data)) v = event.getVelocity();
 
 		playSpellEffects(EffectPosition.CASTER, data.caster(), data);
 		return new CastResult(PostCastAction.HANDLE_NORMALLY, data);

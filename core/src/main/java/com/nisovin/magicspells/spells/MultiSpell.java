@@ -12,7 +12,7 @@ import com.nisovin.magicspells.Subspell;
 import com.nisovin.magicspells.MagicSpells;
 import com.nisovin.magicspells.util.config.ConfigData;
 
-public final class MultiSpell extends InstantSpell {
+public class MultiSpell extends InstantSpell {
 
 	private static final Pattern RANGED_DELAY_PATTERN = Pattern.compile("DELAY [0-9]+ [0-9]+");
 	private static final Pattern BASIC_DELAY_PATTERN = Pattern.compile("DELAY [0-9]+");
