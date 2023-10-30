@@ -12,6 +12,14 @@
     <img src="https://img.shields.io/bstats/servers/892" alt="In MC servers">
 </div>
 
+# Modified Contents on Gloria
+- Pass top-level Spell's arguments to all SubSpell.
+- If arguments is present in PainSpell, that first argument is applied as damage.
+
+> MultiSpell(aka. GloriaSpell) > AreaEffectSpell > MultiTargetedSpell > PainSpell
+When the spelling is configured as above, If you cast GloriaSpell as follows, PainSpell will apply 10 damage.
+`/cast GloriaSpell 10`
+
 [//]: # (These links are here for easier hyperlink referencing and less clutter in the actual text below.)
 [Discord server]: https://discord.magicspells.dev
 [showcase channel]: https://canary.discord.com/channels/335237931633606656/468537255925907466
