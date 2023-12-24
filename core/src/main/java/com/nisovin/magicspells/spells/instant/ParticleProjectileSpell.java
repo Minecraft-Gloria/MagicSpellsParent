@@ -1,10 +1,6 @@
 package com.nisovin.magicspells.spells.instant;
 
-import java.util.Map;
-import java.util.Set;
-import java.util.List;
-import java.util.HashSet;
-import java.util.HashMap;
+import java.util.*;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -343,6 +339,7 @@ public class ParticleProjectileSpell extends InstantSpell implements TargetedLoc
 
 	@Override
 	public CastResult cast(SpellData data) {
+		System.out.println("ParticleProjectileSpell: " + Arrays.toString(data.args()));
 		ParticleProjectileTracker tracker = new ParticleProjectileTracker(data);
 		setupTracker(tracker, data);
 		tracker.start(data.caster().getLocation());

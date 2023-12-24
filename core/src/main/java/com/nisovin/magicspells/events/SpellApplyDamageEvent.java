@@ -1,5 +1,6 @@
 package com.nisovin.magicspells.events;
 
+import com.nisovin.magicspells.util.SpellData;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
@@ -16,11 +17,11 @@ public class SpellApplyDamageEvent extends SpellEvent {
 	private final DamageCause cause;
 	private final long timestamp;
 	private float modifier;
-	private final String[] args;
+	private final SpellData data;
 
 	private boolean processed = false;
 
-	public SpellApplyDamageEvent(Spell spell, LivingEntity caster, LivingEntity target, double damage, DamageCause cause, String spellDamageType, String... args) {
+	public SpellApplyDamageEvent(Spell spell, LivingEntity caster, LivingEntity target, double damage, DamageCause cause, String spellDamageType, SpellData data) {
 		super(spell, caster);
 
 		this.target = target;
@@ -32,7 +33,7 @@ public class SpellApplyDamageEvent extends SpellEvent {
 
 		modifier = 1.0f;
 
-		this.args = args;
+		this.data = data;
 	}
 
 	public void applyDamageModifier(float modifier) {
@@ -69,8 +70,8 @@ public class SpellApplyDamageEvent extends SpellEvent {
 				.setScale(2, RoundingMode.HALF_UP).doubleValue();
 	}
 
-	public String[] getArgs() {
-		return this.args;
+	public SpellData getSpellData() {
+		return this.data;
 	}
 
 	public boolean isProcessed() {

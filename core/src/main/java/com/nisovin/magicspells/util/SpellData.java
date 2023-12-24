@@ -9,17 +9,22 @@ import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 
 public record SpellData(LivingEntity caster, LivingEntity target, Location location, LivingEntity recipient,
-						float power, String[] args) {
+						float power, String[] args, Object extra) {
 
-	public static final SpellData NULL = new SpellData(null, null, null, null, 1f, null);
+	public static final SpellData NULL = new SpellData(null, null, null, null, 1f, null, null);
 
-	public SpellData(LivingEntity caster, LivingEntity target, Location location, LivingEntity recipient, float power, String[] args) {
+	public SpellData(LivingEntity caster, LivingEntity target, Location location, LivingEntity recipient, float power, String[] args, Object extra) {
 		this.caster = caster;
 		this.target = target;
 		this.location = location == null ? null : location.clone();
 		this.recipient = recipient;
 		this.power = power;
 		this.args = args;
+		this.extra = extra;
+	}
+
+	public SpellData(LivingEntity caster, LivingEntity target, Location location, LivingEntity recipient, float power, String[] args) {
+		this(caster, target, location, recipient, power, args, null);
 	}
 
 	public SpellData(LivingEntity caster, LivingEntity target, Location location, float power, String[] args) {
@@ -52,6 +57,10 @@ public record SpellData(LivingEntity caster, LivingEntity target, Location locat
 
 	public SpellData(LivingEntity caster, float power) {
 		this(caster, null, null, null, power, null);
+	}
+
+	public SpellData(LivingEntity caster, Object extra) {
+		this(caster, null, null, null, 1f, null, extra);
 	}
 
 	public SpellData(LivingEntity caster) {
@@ -113,6 +122,10 @@ public record SpellData(LivingEntity caster, LivingEntity target, Location locat
 		return Arrays.equals(this.args, args) ? this : new SpellData(caster, target, location, recipient, power, args);
 	}
 
+	public SpellData extra(Object extra) {
+		return Objects.equals(this.extra, extra) ? this : new SpellData(caster, target, location, recipient, power, args, extra);
+	}
+
 	public SpellData noTargeting() {
 		return target == null && location == null ? this : new SpellData(caster, null, null, recipient, power, args);
 	}
@@ -149,6 +162,7 @@ public record SpellData(LivingEntity caster, LivingEntity target, Location locat
 		private Location location;
 		private float power;
 		private String[] args;
+		private Object extra;
 
 		public Builder() {
 			this(SpellData.NULL);
@@ -161,6 +175,7 @@ public record SpellData(LivingEntity caster, LivingEntity target, Location locat
 			recipient = data.recipient;
 			power = data.power;
 			args = data.args;
+			extra = data.extra;
 		}
 
 		public Builder caster(LivingEntity caster) {
@@ -190,6 +205,11 @@ public record SpellData(LivingEntity caster, LivingEntity target, Location locat
 
 		public Builder args(String[] args) {
 			this.args = args;
+			return this;
+		}
+
+		public Builder extra(Object extra) {
+			this.extra = extra;
 			return this;
 		}
 

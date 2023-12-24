@@ -72,7 +72,7 @@ public class PainSpell extends TargetedSpell implements TargetedEntitySpell {
 		data.target().setLastDamageCause(damageEvent);
 //		}
 
-		SpellApplyDamageEvent event = new SpellApplyDamageEvent(this, data.caster(), data.target(), damage, damageType, spellDamageType, data.args());
+		SpellApplyDamageEvent event = new SpellApplyDamageEvent(this, data.caster(), data.target(), damage, damageType, spellDamageType, data);
 		event.callEvent();
 		damage = event.getFinalDamage();
 

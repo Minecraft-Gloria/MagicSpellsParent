@@ -130,7 +130,7 @@ public class DrainlifeSpell extends TargetedSpell implements TargetedEntitySpell
 					target.setLastDamageCause(event);
 				}
 
-				SpellApplyDamageEvent event = new SpellApplyDamageEvent(this, caster, target, take, damageType, spellDamageType.get(data));
+				SpellApplyDamageEvent event = new SpellApplyDamageEvent(this, caster, target, take, damageType, spellDamageType.get(data), data);
 				EventUtil.call(event);
 				take = event.getFinalDamage();
 				if (ignoreArmor.get(data)) {

@@ -141,6 +141,7 @@ public class ParticleProjectileTracker implements Runnable, Tracker {
 
 	public ParticleProjectileTracker(SpellData data) {
 		this.data = data;
+		System.out.println("PPT: " + data.extra());
 	}
 
 	public void start(Location from) {

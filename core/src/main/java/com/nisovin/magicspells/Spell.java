@@ -1035,7 +1035,7 @@ public abstract class Spell implements Comparable<Spell>, Listener {
 
 	public SpellCastResult hardCast(SpellData data) {
 		data = data.noTargeting();
-
+		System.out.println("hardCast: " + Arrays.toString(data.args()));
 		SpellCastEvent castEvent = preCast(data);
 		if (castEvent == null) return new SpellCastResult(SpellCastState.CANT_CAST, PostCastAction.HANDLE_NORMALLY, data);
 
@@ -1091,6 +1091,7 @@ public abstract class Spell implements Comparable<Spell>, Listener {
 
 	public CastResult onCast(SpellCastEvent castEvent) {
 		SpellData data = castEvent.getSpellData();
+		System.out.println("onCast: " + Arrays.toString(data.args()));
 		long start = System.nanoTime();
 
 		debug(3, "    Power: " + data.power());

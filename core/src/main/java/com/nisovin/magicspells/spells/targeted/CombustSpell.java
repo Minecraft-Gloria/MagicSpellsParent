@@ -98,7 +98,7 @@ public class CombustSpell extends TargetedSpell implements TargetedEntitySpell {
 			if (powerAffectsFireTickDamage.get(data.spellData)) fireTickDamage *= data.spellData.power();
 		}
 
-		EventUtil.call(new SpellApplyDamageEvent(this, data.spellData.caster(), target, fireTickDamage, DamageCause.FIRE_TICK, ""));
+		EventUtil.call(new SpellApplyDamageEvent(this, data.spellData.caster(), target, fireTickDamage, DamageCause.FIRE_TICK, "", data.spellData));
 		event.setDamage(fireTickDamage);
 
 		if (data.preventImmunity) MagicSpells.scheduleDelayedTask(() -> target.setNoDamageTicks(0), 0);

@@ -79,7 +79,11 @@ artifacts {
 publishing {
     publications {
         maven(MavenPublication) {
-            from components.java
+            from(components.java)
+            groupId = "com.nisovin.magicspells"
+            artifactId = "MagicSpells"
+            version = "4.0-Beta-14-Modified"
         }
     }
 }
+

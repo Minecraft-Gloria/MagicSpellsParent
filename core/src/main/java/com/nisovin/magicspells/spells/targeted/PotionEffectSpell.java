@@ -185,7 +185,7 @@ public class PotionEffectSpell extends TargetedSpell implements TargetedEntitySp
 
 			PotionEffect effect = new PotionEffect(type, duration, strength, ambient, particles, icon);
 
-			callDamageEvent(data.caster(), data.target(), effect);
+			callDamageEvent(data.caster(), data.target(), effect, data);
 
 			if (override.get(data) && data.target().hasPotionEffect(type)) data.target().removePotionEffect(type);
 			data.target().addPotionEffect(effect);
@@ -197,7 +197,7 @@ public class PotionEffectSpell extends TargetedSpell implements TargetedEntitySp
 		for (ConfigData<PotionEffect> effectData : potionEffects) {
 			PotionEffect effect = effectData.get(data);
 
-			callDamageEvent(data.caster(), data.target(), effect);
+			callDamageEvent(data.caster(), data.target(), effect, data);
 
 			if (override.get(data) && data.target().hasPotionEffect(effect.getType())) data.target().removePotionEffect(effect.getType());
 			data.target().addPotionEffect(effect);
@@ -207,12 +207,12 @@ public class PotionEffectSpell extends TargetedSpell implements TargetedEntitySp
 		return new CastResult(PostCastAction.HANDLE_NORMALLY, data);
 	}
 
-	private void callDamageEvent(LivingEntity caster, LivingEntity target, PotionEffect effect) {
+	private void callDamageEvent(LivingEntity caster, LivingEntity target, PotionEffect effect, SpellData data) {
 		DamageCause cause = null;
 		if (effect.getType() == PotionEffectType.POISON) cause = DamageCause.POISON;
 		else if (effect.getType() == PotionEffectType.WITHER) cause = DamageCause.WITHER;
 
-		if (cause != null) new SpellApplyDamageEvent(this, caster, target, effect.getAmplifier(), cause, "").callEvent();
+		if (cause != null) new SpellApplyDamageEvent(this, caster, target, effect.getAmplifier(), cause, "", data).callEvent();
 	}
 
 }
