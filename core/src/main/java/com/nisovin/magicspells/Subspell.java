@@ -265,7 +265,6 @@ public class Subspell {
 	}
 
 	public SpellCastResult subcast(SpellData data, boolean passTargeting, boolean useTargetForLocation, CastTargeting[] ordering) {
-		System.out.println("Subspell: " + Arrays.toString(data.args()));
 		if (invert) data = data.invert();
 
 		boolean hasCaster = data.caster() != null;
@@ -314,7 +313,6 @@ public class Subspell {
 			}
 			case NONE -> {
 				if (!hasCaster) yield fail(data);
-				System.out.println("Subspell: " + Arrays.toString(data.args()));
 				yield cast(data);
 			}
 			default -> fail(data);
@@ -328,12 +326,9 @@ public class Subspell {
 	}
 
 	private SpellCastResult cast(SpellData data) {
-		System.out.println("Subspell cast: " + Arrays.toString(data.args()));
 		if (!data.hasCaster()) return fail(data);
 
-		data = data.builder().recipient(null).power((passPower ? data.power() : 1) * subPower.get(data)).args(args.get(data)).extra(data.extra()).build();
-
-		System.out.println("Subspell cast: " + Arrays.toString(data.args()));
+		data = data.builder().recipient(null).power((passPower ? data.power() : 1) * subPower.get(data)).args(args.get(data)).build();
 
 		double chance = this.chance.get(data);
 		if ((chance > 0 && chance < 1) && random.nextDouble() > chance) return fail(data);
@@ -348,7 +343,6 @@ public class Subspell {
 	}
 
 	private SpellCastResult castReal(SpellData data) {
-		System.out.println("Subspell castReal: " + Arrays.toString(data.args()));
 		return switch (mode) {
 			case HARD, FULL -> spell.hardCast(data);
 			case DIRECT -> wrapResult(spell.cast(data));

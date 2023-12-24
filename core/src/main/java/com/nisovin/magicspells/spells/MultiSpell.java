@@ -65,7 +65,6 @@ public class MultiSpell extends InstantSpell {
 
 	@Override
 	public CastResult cast(SpellData data) {
-		System.out.println("MultiSpell: " + Arrays.toString(data.args()));
 		if (!castRandomSpellInstead.get(data)) {
 			int delay = 0;
 

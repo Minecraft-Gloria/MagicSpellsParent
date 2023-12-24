@@ -729,7 +729,6 @@ public class MagicCommand extends BaseCommand {
 					MagicSpells.sendMessage(spell.getStrWrongCastItem(), player, null);
 					return;
 				}
-				System.out.println("MagicCommand: " + Arrays.toString(spellArgs));
 				spell.hardCast(new SpellData(player, power, spellArgs));
 				return;
 			}

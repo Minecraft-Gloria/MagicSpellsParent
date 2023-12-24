@@ -339,7 +339,6 @@ public class ParticleProjectileSpell extends InstantSpell implements TargetedLoc
 
 	@Override
 	public CastResult cast(SpellData data) {
-		System.out.println("ParticleProjectileSpell: " + Arrays.toString(data.args()));
 		ParticleProjectileTracker tracker = new ParticleProjectileTracker(data);
 		setupTracker(tracker, data);
 		tracker.start(data.caster().getLocation());
